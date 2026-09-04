@@ -1,0 +1,87 @@
+﻿@model BiblioPlus.Models.AUTOR
+
+@{
+    ViewBag.Title = "Editar Autor"; @* Título de la página ajustado para "Editar Autor" *@
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-edit me-2"></i> Editar Autor @* Título visual ajustado para "Editar Autor" con ícono de edición *@
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i> Formulario de Edición</h5> @* Título del card-header ajustado *@
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @* Diseño base de Edit: h4 para la entidad y hr simple *@
+                <h4 class="mb-3">Autor</h4> @* Adaptado de "Categoría" a "Autor" con mb-3 para el margen inferior *@
+                <hr class="mb-4" /> @* hr simple con mb-4 para el margen inferior de la línea *@
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.IdAutor) @* IdAutor como campo oculto, crucial para el POST *@
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "col-md-2 control-label" }) @* control-label para consistencia con el base *@
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "col-md-2 control-label" }) @* control-label para consistencia con el base *@
+                    <div class="col-md-10">
+                        <div class="form-check form-switch">
+                            @* Eliminado mt-2 para consistencia con el base, si es que no lo tenía *@
+                            @Html.CheckBox("Estado", Model.Estado.GetValueOrDefault(false), new { @class = "form-check-input", id = "Estado" })
+
+                            <label class="form-check-label" for="Estado">
+                                @(Model != null && Model.Estado.GetValueOrDefault(false) ? "Activo" : "Inactivo")
+                            </label>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.FechaCreacion, htmlAttributes: new { @class = "col-md-2 control-label" }) @* control-label para consistencia con el base *@
+                    <div class="col-md-10">
+                        @* Formato de fecha sin segundos para edición *@
+                        @Html.EditorFor(model => model.FechaCreacion, new { htmlAttributes = new { @class = "form-control", type = "datetime-local", @Value = (Model != null && Model.FechaCreacion.HasValue) ? Model.FechaCreacion.Value.ToString("yyyy-MM-ddTHH:mm") : "" } })
+                        @Html.ValidationMessageFor(model => model.FechaCreacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save me-2"></i> Guardar Cambios</button>
+                    @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn btn-secondary" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>$(document).ready(function () {
+            // Inicializar el texto al cargar la página
+            if ($('#Estado').is(':checked')) {
+                $('#Estado').next('label').text('Activo');
+            } else {
+                $('#Estado').next('label').text('Inactivo');
+            }
+
+            // Actualizar el texto cuando el estado cambia
+            $('#Estado').change(function () {
+                if ($(this).is(':checked')) {
+                    $(this).next('label').text('Activo');
+                } else {
+                    $(this).next('label').text('Inactivo');
+                }
+            });
+        });</script>
+}

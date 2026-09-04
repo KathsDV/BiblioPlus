@@ -1,0 +1,87 @@
+﻿@model BiblioPlus.Models.PRESTAMO
+
+@{
+    ViewBag.Title = "Editar Préstamo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-book-reader me-2"></i> Editar Préstamo
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-edit me-2"></i> Formulario de Edición</h5>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Datos del Préstamo</h4>
+                <hr />
+                @Html.HiddenFor(model => model.IdPrestamo)
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.IdLibro, "Libro", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("IdLibro", null, "Seleccione un libro", new { @class = "form-select", @id = "IdLibro" })
+                        @Html.ValidationMessageFor(model => model.IdLibro, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.FechaDevolucion, "Fecha de devolución", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.FechaDevolucion, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(model => model.FechaDevolucion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save me-2"></i>Guardar cambios</button>
+                        @Html.ActionLink("Cancelar", "Admin", null, new { @class = "btn btn-secondary" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            // Auto cerrar alertas
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+
+            // Activar select2
+            $('#IdLibro').select2({
+                placeholder: "Seleccione un libro",
+                allowClear: true
+            });
+        });
+    </script>
+}

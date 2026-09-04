@@ -1,0 +1,68 @@
+﻿@model BiblioPlus.Models.EDITORIAL
+
+@{
+    ViewBag.Title = "Eliminar Editorial";
+}
+
+<h2 class="text-danger mt-4 mb-4">
+    <i class="fas fa-trash-alt me-2"></i> Confirmar Eliminación de Editorial
+</h2>
+
+<div class="alert alert-danger mb-4" role="alert">
+    <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar esta editorial? Esta acción eliminará el registro de la base de datos.
+    <br />
+    <strong>Recuerde:</strong> Si esta editorial tiene libros asociados, la eliminación fallará debido a restricciones de integridad de la base de datos.
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Detalles de la Editorial a Eliminar</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdEditorial)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdEditorial)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string estadoTexto = Model.Estado.GetValueOrDefault(false) ? "Activo" : "Inactivo";
+                    string badgeClass = Model.Estado.GetValueOrDefault(false) ? "bg-success" : "bg-danger";
+                }
+                <span class="badge @badgeClass">@estadoTexto</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @* Formato de fecha SIN segundos en la vista Delete *@
+                @(Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger me-2"><i class="fas fa-trash-alt me-2"></i> Confirmar Eliminación</button>
+            @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+        }
+
+    </div>
+</div>

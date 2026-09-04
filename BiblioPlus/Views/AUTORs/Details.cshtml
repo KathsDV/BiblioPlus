@@ -1,0 +1,73 @@
+﻿@model BiblioPlus.Models.AUTOR
+@{
+    ViewBag.Title = "Detalles del Autor";
+    int tipoUsuario = Session["IdTipoPersona"] != null ? Convert.ToInt32(Session["IdTipoPersona"]) : 0;
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-info-circle me-2"></i> Detalles del Autor
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-book-open me-2"></i> Información Completa del Autor</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdAutor)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdAutor)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string estadoTexto = "Desconocido";
+                    string badgeClass = "bg-secondary";
+
+                    if (Model.Estado.HasValue)
+                    {
+                        if (Model.Estado.Value == true)
+                        {
+                            estadoTexto = "Activo";
+                            badgeClass = "bg-success";
+                        }
+                        else
+                        {
+                            estadoTexto = "Inactivo";
+                            badgeClass = "bg-danger";
+                        }
+                    }
+                }
+                <span class="badge @badgeClass">@estadoTexto</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @* Formato de fecha SIN segundos *@
+                @(Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @if (tipoUsuario == 1)
+        {
+            @Html.ActionLink("Editar", "Edit", new { id = Model.IdAutor }, new { @class = "btn btn-primary me-2" })
+        }
+            @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+</div>

@@ -1,0 +1,61 @@
+﻿@model BiblioPlus.Models.EDITORIAL
+
+@{
+    ViewBag.Title = "Detalles de Editorial";
+    int tipoUsuario = Session["IdTipoPersona"] != null ? Convert.ToInt32(Session["IdTipoPersona"]) : 0;
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-info-circle me-2"></i> Detalles de Editorial
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-building me-2"></i> Información Completa de la Editorial</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdEditorial)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdEditorial)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string estadoTexto = Model.Estado.GetValueOrDefault(false) ? "Activo" : "Inactivo";
+                    string badgeClass = Model.Estado.GetValueOrDefault(false) ? "bg-success" : "bg-danger";
+                }
+                <span class="badge @badgeClass">@estadoTexto</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @* Formato de fecha SIN segundos *@
+                @(Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @if (tipoUsuario == 1)
+        {
+            @Html.ActionLink("Editar", "Edit", "EDITORIALs", new { id = Model.IdEditorial }, new { @class = "btn btn-primary me-2" })
+        }
+            @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+</div>

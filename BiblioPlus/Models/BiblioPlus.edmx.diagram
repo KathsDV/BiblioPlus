@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c310bee989b34b328539c5d05351dc19" Name="Diagram1" ZoomLevel="73">
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.AUTOR" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.CATEGORIA" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.EDITORIAL" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.ESTADO_PRESTAMO" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.LIBRO" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.TIPO_PERSONA" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__LIBRO__IdAutor__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__LIBRO__IdCategor__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__LIBRO__IdEditori__44FF419A" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.Persona" Width="1.5" PointX="3" PointY="11.25" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK_Persona_TipoPersona" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.ORDEN_COMPRA" Width="1.5" PointX="5.25" PointY="6.375" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdLib__693CA210" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdPer__68487DD7" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.PRESTAMO" Width="1.5" PointX="8.25" PointY="5.75" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.vw_PrestamosRecientes" Width="1.5" PointX="10.375" PointY="0.75" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__PRESTAMO__IdEsta__5FB337D6" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__PRESTAMO__IdLibr__60A75C0F" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__PRESTAMO__IdPers__619B8048" />
+        <EntityTypeShape EntityType="DB_BIBLIOTECAModel.PENALIZACION" Width="1.5" PointX="10.5" PointY="6.375" />
+        <AssociationConnector Association="DB_BIBLIOTECAModel.FK__PENALIZAC__IdPre__5DCAEF64" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

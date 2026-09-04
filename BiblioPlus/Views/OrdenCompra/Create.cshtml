@@ -1,0 +1,113 @@
+﻿    @model BiblioPlus.Models.ORDEN_COMPRA
+
+    @{
+        ViewBag.Title = "Crear Orden de Compra"; 
+    }
+
+    <h2 class="text-primary mt-4 mb-4">
+        <i class="fas fa-plus-circle me-2"></i> Crear Nueva Orden de Compra
+    </h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i> Formulario de Nueva Orden de Compra</h5>
+        </div>
+        <div class="card-body">
+            @* Mensajes de TempData *@
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>Detalles de la Orden de Compra</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="mb-3 row">
+                        @Html.LabelFor(model => model.IdPersona, "Administrador", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                        
+                                                        @Html.DropDownList("IdPersona", null, "-- Selecciona un administrador --", new { @class = "form-select" })
+                                                        @Html.ValidationMessageFor(model => model.IdPersona, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    @Html.LabelFor(model => model.IdLibro, "Libro", htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.DropDownList("IdLibro", null, "-- Selecciona un libro --", new { @class = "form-select", @id = "IdLibro" })
+                                                        @Html.ValidationMessageFor(model => model.IdLibro, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    <label class="control-label col-md-2">Stock actual</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" id="StockActual" class="form-control" disabled />
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
+                                                    <div class="col-md-offset-2 col-md-10">
+                                                        <button type="submit" class="btn btn-primary me-2"><i class="fas fa-plus-circle me-2"></i>Crear Orden</button>
+                                                        @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                @section Scripts {
+                                    @Scripts.Render("~/bundles/jqueryval")
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            // Script para mostrar mensajes de alerta
+                                            window.setTimeout(function () {
+                                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                                    $(this).remove();
+                                                });
+                                            }, 4000);
+
+                                            // Script para obtener el stock del libro
+                                            $('#IdLibro').change(function () {
+                                                var idLibro = $(this).val();
+                                                if (idLibro) {
+                                                    $.getJSON('@Url.Action("GetStock", "OrdenCompra")', { idLibro: idLibro }, function (data) {
+                                                        $('#StockActual').val(data.stock);
+                                                    });
+                                                } else {
+                                                    $('#StockActual').val('');
+                                                }
+                                            });
+
+                                            // Trigger change on load if a book is already selected (e.g., after validation error)
+                                            if ($('#IdLibro').val()) {
+                                                $('#IdLibro').trigger('change');
+                                            }
+                                        });
+                                    </script>
+                               }

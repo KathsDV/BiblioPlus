@@ -1,0 +1,110 @@
+﻿@model BiblioPlus.Models.ORDEN_COMPRA
+
+@{
+    ViewBag.Title = "Detalles de la Orden de Compra";
+    // Si usas un layout explícitamente, descomenta la línea de abajo.
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-info-circle me-2"></i> Detalles de la Orden de Compra
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i> Información Completa de la Orden</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            @* Usamos dl (Description List) con clases de Bootstrap para un diseño de grid *@
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdOrdenCompra)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdOrdenCompra)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Persona.Nombre)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Persona.Nombre) @Html.DisplayFor(model => model.Persona.Apellido)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.LIBRO.Titulo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.LIBRO.Titulo)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Cantidad)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCompra)
+            </dt>
+            <dd class="col-sm-9">
+                @* CORRECCIÓN: Eliminamos .HasValue y .Value asumiendo que FechaCompra es DateTime no anulable *@
+                @Model.FechaCompra.ToString("dd/MM/yyyy hh:mm tt")
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string badgeClass = "";
+                    switch (Model.Estado)
+                    {
+                        case "Pendiente":
+                            badgeClass = "bg-warning text-dark";
+                            break;
+                        case "Completada":
+                            badgeClass = "bg-success";
+                            break;
+                        case "Cancelada":
+                            badgeClass = "bg-danger";
+                            break;
+                        default:
+                            badgeClass = "bg-secondary";
+                            break;
+                    }
+                }
+                <span class="badge @badgeClass">@Html.DisplayFor(model => model.Estado)</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                
+                @Model.FechaCreacion.ToString("dd/MM/yyyy hh:mm tt")
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.IdOrdenCompra }, new { @class = "btn btn-primary me-2" })
+        @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // Script para ocultar los mensajes de alerta después de un tiempo
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        });
+    </script>
+}

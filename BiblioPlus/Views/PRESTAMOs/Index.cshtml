@@ -1,0 +1,193 @@
+﻿@model IEnumerable<BiblioPlus.Models.PRESTAMO>
+
+@{
+    ViewBag.Title = "Gestión de Préstamos";
+
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-handshake me-2"></i> Gestión de Préstamos
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-list-alt me-2"></i> Listado de Préstamos</h5>
+        <a href="@Url.Action("Create")" class="btn btn-light btn-sm" title="Crear Nuevo Préstamo" aria-label="Crear Nuevo Préstamo">
+            <i class="fas fa-plus-circle me-2 text-primary"></i> Nuevo Préstamo
+        </a>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#filtroModal" title="Filtrar Préstamos" aria-label="Filtrar Préstamos">
+                <i class="fas fa-filter me-1"></i> Filtrar Préstamos
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().IdPrestamo)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().LIBRO.Titulo)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().FechaCreacion)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().FechaDevolucion)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().FechaEntregado)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().FechaConfirmacionDevolucion)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().ESTADO_PRESTAMO.Descripcion)
+                        </th>
+                        <th class="text-center align-middle">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.IdPrestamo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.LIBRO.Titulo)</td>
+                            <td>@(item.FechaCreacion.HasValue ? item.FechaCreacion.Value.ToString("dd/MM/yyyy hh:mm tt") : "N/A")</td>
+                            <td>@(item.FechaDevolucion.HasValue ? item.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td>@(item.FechaEntregado.HasValue ? item.FechaEntregado.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td>@(item.FechaConfirmacionDevolucion.HasValue ? item.FechaConfirmacionDevolucion.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td>
+                                @{
+                                    string badgeClass = "";
+                                    switch (item.ESTADO_PRESTAMO.Descripcion)
+                                    {
+                                        case "Pendiente":
+                                            badgeClass = "bg-warning text-dark";
+                                            break;
+                                        case "Retirado":
+                                            badgeClass = "bg-info";
+                                            break;
+                                        case "Devuelto":
+                                            badgeClass = "bg-success";
+                                            break;
+                                        case "Vencido":
+                                            badgeClass = "bg-danger";
+                                            break;
+                                        default:
+                                            badgeClass = "bg-secondary";
+                                            break;
+                                    }
+                                }
+                                <span class="badge @badgeClass">@Html.DisplayFor(modelItem => item.ESTADO_PRESTAMO.Descripcion)</span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Acciones de Préstamo">
+                                    @if (item.IdEstadoPrestamo == 1)
+                                    {
+                                        @Html.ActionLink("Hacer Ticket", "Ticket", new { id = item.IdPrestamo }, new { @class = "btn btn-primary btn-sm", title = "Hacer Ticket" })
+                                    }
+                                    
+                                    @* El botón de Detalles siempre debe estar disponible *@
+                                    <a href="@Url.Action("Details", new { id = item.IdPrestamo })" class="btn btn-sm btn-info @(item.IdEstadoPrestamo == 1 || item.IdEstadoPrestamo == 2 ? "ms-1" : "")" title="Ver Detalles" aria-label="Ver Detalles">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Index", "PRESTAMOs", FormMethod.Get))
+{
+    <div class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="filtroModalLabel"><i class="fas fa-filter me-2"></i> Filtrar Mis Préstamos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">ID Préstamo</label>
+                        <input type="number" name="idPrestamo" class="form-control" value="@ViewBag.IdPrestamo" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Título del Libro</label>
+                        <input type="text" name="libro" class="form-control" value="@ViewBag.Libro" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        @Html.DropDownList("estado", new SelectList(ViewBag.Estados as List<string>, ViewBag.Estado), "Todos", new { @class = "form-control" })
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Préstamo (Desde)</label>
+                        <input type="date" name="fechaPrestamoDesde" class="form-control" value="@ViewBag.FechaPrestamoDesde" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Préstamo (Hasta)</label>
+                        <input type="date" name="fechaPrestamoHasta" class="form-control" value="@ViewBag.FechaPrestamoHasta" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Devolución (Desde)</label>
+                        <input type="date" name="fechaDevolucionDesde" class="form-control" value="@ViewBag.FechaDevolucionDesde" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha de Devolución (Hasta)</label>
+                        <input type="date" name="fechaDevolucionHasta" class="form-control" value="@ViewBag.FechaDevolucionHasta" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-check-circle me-1"></i> Aplicar Filtros</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle me-1"></i> Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        });
+    </script>
+}

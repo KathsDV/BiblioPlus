@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB_BIBLIOTECAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AUTOR">
+    <Key>
+      <PropertyRef Name="IdAutor" />
+    </Key>
+    <Property Name="IdAutor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="LIBROes" Relationship="Self.FK__LIBRO__IdAutor__45F365D3" FromRole="AUTOR" ToRole="LIBRO" />
+  </EntityType>
+  <EntityType Name="CATEGORIA">
+    <Key>
+      <PropertyRef Name="IdCategoria" />
+    </Key>
+    <Property Name="IdCategoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="LIBROes" Relationship="Self.FK__LIBRO__IdCategor__440B1D61" FromRole="CATEGORIA" ToRole="LIBRO" />
+  </EntityType>
+  <EntityType Name="EDITORIAL">
+    <Key>
+      <PropertyRef Name="IdEditorial" />
+    </Key>
+    <Property Name="IdEditorial" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="LIBROes" Relationship="Self.FK__LIBRO__IdEditori__44FF419A" FromRole="EDITORIAL" ToRole="LIBRO" />
+  </EntityType>
+  <EntityType Name="ESTADO_PRESTAMO">
+    <Key>
+      <PropertyRef Name="IdEstadoPrestamo" />
+    </Key>
+    <Property Name="IdEstadoPrestamo" Type="Int32" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PRESTAMOes" Relationship="DB_BIBLIOTECAModel.FK__PRESTAMO__IdEsta__5FB337D6" FromRole="ESTADO_PRESTAMO" ToRole="PRESTAMO" />
+  </EntityType>
+  <EntityType Name="LIBRO">
+    <Key>
+      <PropertyRef Name="IdLibro" />
+    </Key>
+    <Property Name="IdLibro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Edicion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AnioPublicacion" Type="Int32" />
+    <Property Name="IdCategoria" Type="Int32" />
+    <Property Name="IdEditorial" Type="Int32" />
+    <Property Name="IdAutor" Type="Int32" />
+    <Property Name="Estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="StockActual" Type="Int32" />
+    <NavigationProperty Name="AUTOR" Relationship="Self.FK__LIBRO__IdAutor__45F365D3" FromRole="LIBRO" ToRole="AUTOR" />
+    <NavigationProperty Name="CATEGORIA" Relationship="Self.FK__LIBRO__IdCategor__440B1D61" FromRole="LIBRO" ToRole="CATEGORIA" />
+    <NavigationProperty Name="EDITORIAL" Relationship="Self.FK__LIBRO__IdEditori__44FF419A" FromRole="LIBRO" ToRole="EDITORIAL" />
+    <NavigationProperty Name="ORDEN_COMPRA" Relationship="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdLib__693CA210" FromRole="LIBRO" ToRole="ORDEN_COMPRA" />
+    <NavigationProperty Name="PRESTAMOes" Relationship="DB_BIBLIOTECAModel.FK__PRESTAMO__IdLibr__60A75C0F" FromRole="LIBRO" ToRole="PRESTAMO" />
+  </EntityType>
+  <EntityType Name="TIPO_PERSONA">
+    <Key>
+      <PropertyRef Name="IdTipoPersona" />
+    </Key>
+    <Property Name="IdTipoPersona" Type="Int32" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Personas" Relationship="DB_BIBLIOTECAModel.FK_Persona_TipoPersona" FromRole="TIPO_PERSONA" ToRole="Persona" />
+  </EntityType>
+  <Association Name="FK__LIBRO__IdAutor__45F365D3">
+    <End Role="AUTOR" Type="Self.AUTOR" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AUTOR">
+        <PropertyRef Name="IdAutor" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="IdAutor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LIBRO__IdCategor__440B1D61">
+    <End Role="CATEGORIA" Type="Self.CATEGORIA" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CATEGORIA">
+        <PropertyRef Name="IdCategoria" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="IdCategoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LIBRO__IdEditori__44FF419A">
+    <End Role="EDITORIAL" Type="Self.EDITORIAL" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EDITORIAL">
+        <PropertyRef Name="IdEditorial" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="IdEditorial" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DB_BIBLIOTECAEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AUTORs" EntityType="Self.AUTOR" />
+    <EntitySet Name="CATEGORIAs" EntityType="Self.CATEGORIA" />
+    <EntitySet Name="EDITORIALs" EntityType="Self.EDITORIAL" />
+    <EntitySet Name="ESTADO_PRESTAMO" EntityType="Self.ESTADO_PRESTAMO" />
+    <EntitySet Name="LIBROes" EntityType="Self.LIBRO" />
+    <EntitySet Name="TIPO_PERSONA" EntityType="Self.TIPO_PERSONA" />
+    <AssociationSet Name="FK__LIBRO__IdAutor__45F365D3" Association="Self.FK__LIBRO__IdAutor__45F365D3">
+      <End Role="AUTOR" EntitySet="AUTORs" />
+      <End Role="LIBRO" EntitySet="LIBROes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LIBRO__IdCategor__440B1D61" Association="Self.FK__LIBRO__IdCategor__440B1D61">
+      <End Role="CATEGORIA" EntitySet="CATEGORIAs" />
+      <End Role="LIBRO" EntitySet="LIBROes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LIBRO__IdEditori__44FF419A" Association="Self.FK__LIBRO__IdEditori__44FF419A">
+      <End Role="EDITORIAL" EntitySet="EDITORIALs" />
+      <End Role="LIBRO" EntitySet="LIBROes" />
+    </AssociationSet>
+    <EntitySet Name="Personas" EntityType="DB_BIBLIOTECAModel.Persona" />
+    <AssociationSet Name="FK_Persona_TipoPersona" Association="DB_BIBLIOTECAModel.FK_Persona_TipoPersona">
+      <End Role="TIPO_PERSONA" EntitySet="TIPO_PERSONA" />
+      <End Role="Persona" EntitySet="Personas" />
+    </AssociationSet>
+    <EntitySet Name="ORDEN_COMPRA" EntityType="DB_BIBLIOTECAModel.ORDEN_COMPRA" />
+    <AssociationSet Name="FK__ORDEN_COM__IdLib__693CA210" Association="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdLib__693CA210">
+      <End Role="LIBRO" EntitySet="LIBROes" />
+      <End Role="ORDEN_COMPRA" EntitySet="ORDEN_COMPRA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ORDEN_COM__IdPer__68487DD7" Association="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdPer__68487DD7">
+      <End Role="Persona" EntitySet="Personas" />
+      <End Role="ORDEN_COMPRA" EntitySet="ORDEN_COMPRA" />
+    </AssociationSet>
+    <EntitySet Name="PRESTAMOes" EntityType="DB_BIBLIOTECAModel.PRESTAMO" />
+    <EntitySet Name="vw_PrestamosRecientes" EntityType="DB_BIBLIOTECAModel.vw_PrestamosRecientes" />
+    <AssociationSet Name="FK__PRESTAMO__IdEsta__5FB337D6" Association="DB_BIBLIOTECAModel.FK__PRESTAMO__IdEsta__5FB337D6">
+      <End Role="ESTADO_PRESTAMO" EntitySet="ESTADO_PRESTAMO" />
+      <End Role="PRESTAMO" EntitySet="PRESTAMOes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESTAMO__IdLibr__60A75C0F" Association="DB_BIBLIOTECAModel.FK__PRESTAMO__IdLibr__60A75C0F">
+      <End Role="LIBRO" EntitySet="LIBROes" />
+      <End Role="PRESTAMO" EntitySet="PRESTAMOes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESTAMO__IdPers__619B8048" Association="DB_BIBLIOTECAModel.FK__PRESTAMO__IdPers__619B8048">
+      <End Role="Persona" EntitySet="Personas" />
+      <End Role="PRESTAMO" EntitySet="PRESTAMOes" />
+    </AssociationSet>
+    <EntitySet Name="PENALIZACIONs" EntityType="DB_BIBLIOTECAModel.PENALIZACION" />
+    <AssociationSet Name="FK__PENALIZAC__IdPre__5DCAEF64" Association="DB_BIBLIOTECAModel.FK__PENALIZAC__IdPre__5DCAEF64">
+      <End Role="PRESTAMO" EntitySet="PRESTAMOes" />
+      <End Role="PENALIZACION" EntitySet="PENALIZACIONs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Persona">
+    <Key>
+      <PropertyRef Name="IdPersona" />
+    </Key>
+    <Property Name="IdPersona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Clave" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Int32" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="IdTipoPersona" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TIPO_PERSONA" Relationship="DB_BIBLIOTECAModel.FK_Persona_TipoPersona" FromRole="Persona" ToRole="TIPO_PERSONA" />
+    <NavigationProperty Name="ORDEN_COMPRA" Relationship="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdPer__68487DD7" FromRole="Persona" ToRole="ORDEN_COMPRA" />
+    <NavigationProperty Name="PRESTAMOes" Relationship="DB_BIBLIOTECAModel.FK__PRESTAMO__IdPers__619B8048" FromRole="Persona" ToRole="PRESTAMO" />
+  </EntityType>
+  <Association Name="FK_Persona_TipoPersona">
+    <End Type="DB_BIBLIOTECAModel.TIPO_PERSONA" Role="TIPO_PERSONA" Multiplicity="1" />
+    <End Type="DB_BIBLIOTECAModel.Persona" Role="Persona" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TIPO_PERSONA">
+        <PropertyRef Name="IdTipoPersona" />
+      </Principal>
+      <Dependent Role="Persona">
+        <PropertyRef Name="IdTipoPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ORDEN_COMPRA">
+    <Key>
+      <PropertyRef Name="IdOrdenCompra" />
+    </Key>
+    <Property Name="IdOrdenCompra" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPersona" Type="Int32" Nullable="false" />
+    <Property Name="IdLibro" Type="Int32" Nullable="false" />
+    <Property Name="Cantidad" Type="Int32" Nullable="false" />
+    <Property Name="FechaCompra" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Estado" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="LIBRO" Relationship="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdLib__693CA210" FromRole="ORDEN_COMPRA" ToRole="LIBRO" />
+    <NavigationProperty Name="Persona" Relationship="DB_BIBLIOTECAModel.FK__ORDEN_COM__IdPer__68487DD7" FromRole="ORDEN_COMPRA" ToRole="Persona" />
+  </EntityType>
+  <Association Name="FK__ORDEN_COM__IdLib__693CA210">
+    <End Type="DB_BIBLIOTECAModel.LIBRO" Role="LIBRO" Multiplicity="1" />
+    <End Type="DB_BIBLIOTECAModel.ORDEN_COMPRA" Role="ORDEN_COMPRA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="IdLibro" />
+      </Principal>
+      <Dependent Role="ORDEN_COMPRA">
+        <PropertyRef Name="IdLibro" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ORDEN_COM__IdPer__68487DD7">
+    <End Type="DB_BIBLIOTECAModel.Persona" Role="Persona" Multiplicity="1" />
+    <End Type="DB_BIBLIOTECAModel.ORDEN_COMPRA" Role="ORDEN_COMPRA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="IdPersona" />
+      </Principal>
+      <Dependent Role="ORDEN_COMPRA">
+        <PropertyRef Name="IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PRESTAMO">
+    <Key>
+      <PropertyRef Name="IdPrestamo" />
+    </Key>
+    <Property Name="IdPrestamo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdEstadoPrestamo" Type="Int32" />
+    <Property Name="IdPersona" Type="Int32" />
+    <Property Name="IdLibro" Type="Int32" />
+    <Property Name="FechaDevolucion" Type="DateTime" Precision="3" />
+    <Property Name="FechaConfirmacionDevolucion" Type="DateTime" Precision="3" />
+    <Property Name="EstadoEntregado" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="EstadoRecibido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FechaEntregado" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="ESTADO_PRESTAMO" Relationship="DB_BIBLIOTECAModel.FK__PRESTAMO__IdEsta__5FB337D6" FromRole="PRESTAMO" ToRole="ESTADO_PRESTAMO" />
+    <NavigationProperty Name="LIBRO" Relationship="DB_BIBLIOTECAModel.FK__PRESTAMO__IdLibr__60A75C0F" FromRole="PRESTAMO" ToRole="LIBRO" />
+    <NavigationProperty Name="Persona" Relationship="DB_BIBLIOTECAModel.FK__PRESTAMO__IdPers__619B8048" FromRole="PRESTAMO" ToRole="Persona" />
+    <NavigationProperty Name="PENALIZACIONs" Relationship="DB_BIBLIOTECAModel.FK__PENALIZAC__IdPre__5DCAEF64" FromRole="PRESTAMO" ToRole="PENALIZACION" />
+  </EntityType>
+  <EntityType Name="vw_PrestamosRecientes">
+    <Key>
+      <PropertyRef Name="IdPrestamo" />
+      <PropertyRef Name="Titulo" />
+    </Key>
+    <Property Name="IdPrestamo" Type="Int32" Nullable="false" />
+    <Property Name="Titulo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Lector" Type="String" MaxLength="101" FixedLength="false" Unicode="false" />
+    <Property Name="FechaEntregado" Type="DateTime" Precision="3" />
+    <Property Name="FechaDevolucion" Type="DateTime" Precision="3" />
+  </EntityType>
+  <Association Name="FK__PRESTAMO__IdEsta__5FB337D6">
+    <End Type="DB_BIBLIOTECAModel.ESTADO_PRESTAMO" Role="ESTADO_PRESTAMO" Multiplicity="0..1" />
+    <End Type="DB_BIBLIOTECAModel.PRESTAMO" Role="PRESTAMO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTADO_PRESTAMO">
+        <PropertyRef Name="IdEstadoPrestamo" />
+      </Principal>
+      <Dependent Role="PRESTAMO">
+        <PropertyRef Name="IdEstadoPrestamo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESTAMO__IdLibr__60A75C0F">
+    <End Type="DB_BIBLIOTECAModel.LIBRO" Role="LIBRO" Multiplicity="0..1" />
+    <End Type="DB_BIBLIOTECAModel.PRESTAMO" Role="PRESTAMO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="IdLibro" />
+      </Principal>
+      <Dependent Role="PRESTAMO">
+        <PropertyRef Name="IdLibro" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESTAMO__IdPers__619B8048">
+    <End Type="DB_BIBLIOTECAModel.Persona" Role="Persona" Multiplicity="0..1" />
+    <End Type="DB_BIBLIOTECAModel.PRESTAMO" Role="PRESTAMO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="IdPersona" />
+      </Principal>
+      <Dependent Role="PRESTAMO">
+        <PropertyRef Name="IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PENALIZACION">
+    <Key>
+      <PropertyRef Name="IdPenalizacion" />
+    </Key>
+    <Property Name="IdPenalizacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPrestamo" Type="Int32" />
+    <Property Name="Monto" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Motivo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="FechaRegistro" Type="DateTime" Precision="3" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="Pagado" Type="Boolean" />
+    <NavigationProperty Name="PRESTAMO" Relationship="DB_BIBLIOTECAModel.FK__PENALIZAC__IdPre__5DCAEF64" FromRole="PENALIZACION" ToRole="PRESTAMO" />
+  </EntityType>
+  <Association Name="FK__PENALIZAC__IdPre__5DCAEF64">
+    <End Type="DB_BIBLIOTECAModel.PRESTAMO" Role="PRESTAMO" Multiplicity="0..1" />
+    <End Type="DB_BIBLIOTECAModel.PENALIZACION" Role="PENALIZACION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRESTAMO">
+        <PropertyRef Name="IdPrestamo" />
+      </Principal>
+      <Dependent Role="PENALIZACION">
+        <PropertyRef Name="IdPrestamo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

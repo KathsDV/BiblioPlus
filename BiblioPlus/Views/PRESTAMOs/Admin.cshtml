@@ -1,0 +1,265 @@
+﻿@model IEnumerable<BiblioPlus.Models.PRESTAMO>
+
+@{
+    ViewBag.Title = "Gestión de Préstamos";
+    int tipoUsuario = Session["IdTipoPersona"] != null ? Convert.ToInt32(Session["IdTipoPersona"]) : 0;
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-handshake me-2"></i> Gestión de Préstamos
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i> Listado de Préstamos</h5>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="mb-3">
+            @using (Html.BeginForm("Admin", "PRESTAMOs", FormMethod.Get, new { @class = "row g-3 align-items-center" }))
+            {
+                <div class="col-12 col-md-auto d-flex flex-wrap justify-content-center justify-content-md-start">
+                    <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#filtroModal"><i class="fas fa-filter me-1"></i> Filtros Avanzados</button>
+                    @Html.ActionLink("Ver Todos", "Admin", null, new { @class = "btn btn-secondary" })
+                </div>
+            }
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="text-align: center; vertical-align: middle;">@Html.DisplayNameFor(model => model.FirstOrDefault().IdPrestamo)</th>
+                        <th style="text-align: center; vertical-align: middle;">@Html.DisplayNameFor(model => model.FirstOrDefault().LIBRO.Titulo)</th>
+                        <th style="text-align: center; vertical-align: middle;">@Html.DisplayNameFor(model => model.FirstOrDefault().Persona.Nombre)</th>
+                        <th style="text-align: center; vertical-align: middle;">Estado</th>
+                        <th style="text-align: center; vertical-align: middle;">@Html.DisplayNameFor(model => model.FirstOrDefault().FechaDevolucion)</th>
+                        <th style="text-align: center; vertical-align: middle;">@Html.DisplayNameFor(model => model.FirstOrDefault().FechaEntregado)</th>
+                        <th style="text-align: center; vertical-align: middle;">@Html.DisplayNameFor(model => model.FirstOrDefault().FechaConfirmacionDevolucion)</th>
+                        <th style="text-align: center; vertical-align: middle;">Penalización</th>
+                        <th style="text-align: center; vertical-align: middle;">Pago Confirmado</th>
+                        <th style="text-align: center; vertical-align: middle;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.IdPrestamo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.LIBRO.Titulo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Persona.Nombre)</td>
+                            <td>
+                                @{
+                                    string badgeClass = "";
+                                    switch (item.IdEstadoPrestamo)
+                                    {
+                                        case 1:
+                                            badgeClass = "bg-secondary";
+                                            break;
+                                        case 2:
+                                            badgeClass = "bg-info text-dark";
+                                            break;
+                                        case 3:
+                                            badgeClass = "bg-success";
+                                            break;
+                                        case 4:
+                                            badgeClass = "bg-danger";
+                                            break;
+                                        case 5:
+                                            badgeClass = "bg-warning text-dark";
+                                            break;
+                                        case 6:
+                                            badgeClass = "bg-primary";
+                                            break;
+                                        default:
+                                            badgeClass = "bg-dark";
+                                            break;
+                                    }
+                                }
+                                <span class="badge @badgeClass">@Html.DisplayFor(modelItem => item.ESTADO_PRESTAMO.Descripcion)</span>
+                            </td>
+                            <td>@(item.FechaDevolucion.HasValue ? item.FechaDevolucion.Value.ToString("MM/dd/yyyy") : "N/A")</td>
+                            <td>@(item.FechaEntregado.HasValue ? item.FechaEntregado.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")</td>
+                            <td>@(item.FechaConfirmacionDevolucion.HasValue ? item.FechaConfirmacionDevolucion.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")</td>
+                            <td>
+                                @{
+                                    var penalizacion = item.PENALIZACIONs.FirstOrDefault(p => p.Estado == true);
+                                    if (penalizacion != null)
+                                    {
+                                        <span class="text-danger"><i class="fas fa-exclamation-triangle me-1"></i> Sí - $@string.Format("{0:N2}", penalizacion.Monto)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success"><i class="fas fa-check-circle me-1"></i> No</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    penalizacion = item.PENALIZACIONs.FirstOrDefault(p => p.Estado == true);
+                                    if (penalizacion != null)
+                                    {
+                                        if (penalizacion.Pagado == true)
+                                        {
+                                            <span class="text-success"><i class="fas fa-dollar-sign me-1"></i> Pagado</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-warning"><i class="fas fa-hourglass-half me-1"></i> Pendiente</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Acciones de Préstamo">
+                           
+                                        @if (item.IdEstadoPrestamo == 1)
+                                        {
+                                            <a href="@Url.Action("Edit", new { id = item.IdPrestamo })" class="btn btn-sm btn-warning" title="Editar Préstamo"><i class="fas fa-pencil-alt"></i></a>
+                                            using (Html.BeginForm("Cancelar", "PRESTAMOs", new { id = item.IdPrestamo }, FormMethod.Post, new { @class = "d-inline ms-1" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Cancelar Préstamo"><i class="fas fa-times-circle"></i></button>
+                                            }
+                                            using (Html.BeginForm("ConfirmarEntrega", "PRESTAMOs", new { id = item.IdPrestamo }, FormMethod.Post, new { @class = "d-inline ms-1" }))
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-success" title="Confirmar Entrega"><i class="fas fa-truck"></i></button>
+                                            }
+                                        }
+                                        @if (item.IdEstadoPrestamo == 2)
+                                        {
+                                            using (Html.BeginForm("ConfirmarDevolucion", "PRESTAMOs", new { id = item.IdPrestamo }, FormMethod.Post, new { @class = "d-inline me-1" }))
+                                            {
+                                                <button type="submit" class="btn btn-sm btn-primary" title="Confirmar Devolución"><i class="fas fa-undo"></i></button>
+                                            }
+                                            using (Html.BeginForm("Renovar", "PRESTAMOs", FormMethod.Post, new { @class = "d-inline" }))
+                                            {
+                                                <input type="hidden" name="id" value="@item.IdPrestamo" />
+                                                <select name="dias" class="form-select form-select-sm d-inline w-auto me-1" aria-label="Seleccionar días para renovar">
+                                                    @for (int i = 1; i <= 14; i++)
+                                                    {
+                                                        <option value="@i">@i días</option>
+                                                    }
+                                                </select>
+                                                <button type="submit" class="btn btn-sm btn-info" title="Renovar Préstamo"><i class="fas fa-sync-alt"></i></button>
+                                            }
+                                        }
+                                        @if (item.IdEstadoPrestamo == 4)
+                                        {
+                                            using (Html.BeginForm("ConfirmarPago", "PRESTAMOs", FormMethod.Post, new { @class = "d-inline" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("idPenalizacion", penalizacion.IdPenalizacion)
+                                                @Html.Hidden("idPrestamo", item.IdPrestamo)
+                                                <button type="submit" class="btn btn-sm btn-success" title="Confirmar Pago de Penalización"><i class="fas fa-dollar-sign"></i></button>
+                                            }
+                                        }
+                                   
+
+                                    <a href="@Url.Action("Details", new { id = item.IdPrestamo })" class="btn btn-sm btn-info @((tipoUsuario == 1 || tipoUsuario == 2) && (item.IdEstadoPrestamo == 1 || item.IdEstadoPrestamo == 2 || (item.IdEstadoPrestamo == 4 && penalizacion != null && penalizacion.Pagado == false)) ? "ms-1" : "")" title="Ver Detalles"><i class="fas fa-info-circle"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Admin", "PRESTAMOs", FormMethod.Get))
+{
+    <div class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="filtroModalLabel"><i class="fas fa-filter me-2"></i>Filtrar Préstamos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="idPrestamo" class="form-label">ID Préstamo</label>
+                            <input type="number" id="idPrestamo" name="idPrestamo" class="form-control" value="@ViewBag.IdPrestamo" placeholder="Ej. 123" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label">Nombre Persona</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" value="@ViewBag.Nombre" placeholder="Ej. Juan Pérez" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="libro" class="form-label">Título del Libro</label>
+                            <input type="text" id="libro" name="libro" class="form-control" value="@ViewBag.Libro" placeholder="Ej. El Señor de los Anillos" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="estado" class="form-label">Estado</label>
+                            @Html.DropDownList("estado", new SelectList(ViewBag.Estados as List<string>, ViewBag.Estado), "Todos", new { @class = "form-select", id = "estado" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fechaPrestamoDesde" class="form-label">Fecha de Préstamo (Desde)</label>
+                            <input type="date" id="fechaPrestamoDesde" name="fechaPrestamoDesde" class="form-control" value="@(ViewBag.FechaPrestamoDesde != null ? ViewBag.FechaPrestamoDesde.ToString("yyyy-MM-dd") : "")" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fechaPrestamoHasta" class="form-label">Fecha de Préstamo (Hasta)</label>
+                            <input type="date" id="fechaPrestamoHasta" name="fechaPrestamoHasta" class="form-control" value="@(ViewBag.FechaPrestamoHasta != null ? ViewBag.FechaPrestamoHasta.ToString("yyyy-MM-dd") : "")" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fechaDevolucionDesde" class="form-label">Fecha de Devolución (Desde)</label>
+                            <input type="date" id="fechaDevolucionDesde" name="fechaDevolucionDesde" class="form-control" value="@(ViewBag.FechaDevolucionDesde != null ? ViewBag.FechaDevolucionDesde.ToString("yyyy-MM-dd") : "")" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fechaDevolucionHasta" class="form-label">Fecha de Devolución (Hasta)</label>
+                            <input type="date" id="fechaDevolucionHasta" name="fechaDevolucionHasta" class="form-control" value="@(ViewBag.FechaDevolucionHasta != null ? ViewBag.FechaDevolucionHasta.ToString("yyyy-MM-dd") : "")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-check-circle me-1"></i> Aplicar Filtros</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle me-1"></i> Cerrar</button>
+                    <a href="@Url.Action("Admin")" class="btn btn-outline-secondary"><i class="fas fa-redo me-1"></i> Limpiar Filtros</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasFilters = Array.from(urlParams.keys()).some(key =>
+                ['idPrestamo', 'nombre', 'libro', 'estado', 'fechaPrestamoDesde', 'fechaPrestamoHasta', 'fechaDevolucionDesde', 'fechaDevolucionHasta']
+                    .includes(key) && urlParams.get(key) !== ''
+            );
+
+            if (hasFilters && !window.location.hash) {
+                var filterModal = new bootstrap.Modal(document.getElementById('filtroModal'));
+                filterModal.show();
+            }
+        });
+    </script>
+}

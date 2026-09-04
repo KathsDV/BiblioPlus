@@ -1,0 +1,119 @@
+﻿@model BiblioPlus.Models.LIBRO
+
+@{
+    ViewBag.Title = "Eliminar Libro";
+}
+
+<h2 class="text-danger mt-4 mb-4">
+    <i class="fas fa-trash-alt me-2"></i> Confirmar Eliminación (Marcar como Extraviado)
+</h2>
+
+<div class="alert alert-danger mb-4" role="alert">
+    <strong>¡Atención!</strong> ¿Está seguro de que desea marcar este libro como <strong>"Extraviado"</strong>? Esta acción no eliminará el registro de la base de datos, solo cambiará su estado.
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-book me-2"></i> Detalles del Libro a Marcar como Extraviado</h5> @* Ícono específico para Libro *@
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            @* Usamos dl (Description List) con clases de Bootstrap para un diseño de grid *@
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdLibro) @* Añadido para mostrar el ID del libro *@
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdLibro)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Titulo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Titulo)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Edicion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Edicion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.AnioPublicacion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AnioPublicacion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string badgeClass = "";
+                    switch (Model.Estado)
+                    {
+                        case "Libre":
+                            badgeClass = "bg-success";
+                            break;
+                        case "Prestado":
+                            badgeClass = "bg-warning text-dark";
+                            break;
+                        case "En Reparacion":
+                            badgeClass = "bg-info text-dark";
+                            break;
+                        case "Extraviado":
+                            badgeClass = "bg-danger";
+                            break;
+                        default:
+                            badgeClass = "bg-secondary";
+                            break;
+                    }
+                }
+                <span class="badge @badgeClass">@Html.DisplayFor(model => model.Estado)</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                Categoría
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.CATEGORIA.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                Editorial
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EDITORIAL.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                Autor
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AUTOR.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @* Formato de fecha SIN segundos en la vista Delete *@
+                @(Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger me-2"><i class="fas fa-exclamation-triangle me-2"></i>Confirmar Extraviado</button> @* Mantengo tu texto y ícono original del botón de Libro *@
+        }
+        @* El botón Cancelar debe estar fuera del formulario de eliminación para que no se envíe al hacer clic *@
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>

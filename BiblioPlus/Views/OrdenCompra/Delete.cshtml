@@ -1,0 +1,115 @@
+﻿@model BiblioPlus.Models.ORDEN_COMPRA
+
+@{
+    ViewBag.Title = "Eliminar Orden de Compra";
+}
+
+<h2 class="text-danger mt-4 mb-4">
+    <i class="fas fa-trash-alt me-2"></i> Confirmar Eliminación de Orden de Compra
+</h2>
+
+<div class="alert alert-danger mb-4" role="alert">
+    <strong>¡Atención!</strong> ¿Está seguro de que desea eliminar esta orden de compra? Esta acción es irreversible y también ajustará el stock del libro asociado.
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i> Detalles de la Orden a Eliminar</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            @* Usamos dl (Description List) con clases de Bootstrap para un diseño de grid *@
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdOrdenCompra)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdOrdenCompra)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Persona.Nombre)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Persona.Nombre) @Html.DisplayFor(model => model.Persona.Apellido)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.LIBRO.Titulo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.LIBRO.Titulo)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Cantidad)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCompra)
+            </dt>
+            <dd class="col-sm-9">
+                @* Asumiendo que FechaCompra es DateTime no anulable como corregimos antes *@
+                @Model.FechaCompra.ToString("dd/MM/yyyy hh:mm tt")
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string badgeClass = "";
+                    switch (Model.Estado)
+                    {
+                        case "Pendiente":
+                            badgeClass = "bg-warning text-dark";
+                            break;
+                        case "Completada":
+                            badgeClass = "bg-success";
+                            break;
+                        case "Cancelada":
+                            badgeClass = "bg-danger";
+                            break;
+                        default:
+                            badgeClass = "bg-secondary";
+                            break;
+                    }
+                }
+                <span class="badge @badgeClass">@Html.DisplayFor(model => model.Estado)</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @* Asumiendo que FechaCreacion es DateTime no anulable como corregimos antes *@
+                @Model.FechaCreacion.ToString("dd/MM/yyyy hh:mm tt")
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger me-2"><i class="fas fa-trash-alt me-2"></i>Eliminar</button>
+        }
+        @* El botón Cancelar debe estar fuera del formulario de eliminación para que no se envíe al hacer clic *@
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>$(document).ready(function () {
+            // Script para ocultar los mensajes de alerta después de un tiempo
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        });</script>
+}

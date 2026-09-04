@@ -1,0 +1,81 @@
+﻿@model BiblioPlus.Models.CATEGORIA
+
+@{
+    ViewBag.Title = "Editar Categoría";
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-edit me-2"></i> Editar Categoría
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i> Formulario de Edición</h5>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Categoría</h4> @* Implementación del h4 *@
+                <hr /> @* Implementación del hr *@
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.IdCategoria)
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="form-check form-switch">
+                            @Html.CheckBox("Estado", Model.Estado.GetValueOrDefault(false), new { @class = "form-check-input", id = "Estado" })
+                            <label class="form-check-label" for="Estado">
+                                @(Model.Estado.GetValueOrDefault(false) ? "Activo" : "Inactivo")
+                            </label>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    @Html.LabelFor(model => model.FechaCreacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FechaCreacion, new { htmlAttributes = new { @class = "form-control", type = "datetime-local", @Value = Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("yyyy-MM-ddTHH:mm") : "" } })
+                        @Html.ValidationMessageFor(model => model.FechaCreacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save me-2"></i> Guardar Cambios</button>
+                    @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn btn-secondary" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>$(document).ready(function () {
+            if ($('#Estado').is(':checked')) {
+                $('#Estado').next('label').text('Activo');
+            } else {
+                $('#Estado').next('label').text('Inactivo');
+            }
+
+            $('#Estado').change(function () {
+                if ($(this).is(':checked')) {
+                    $(this).next('label').text('Activo');
+                } else {
+                    $(this).next('label').text('Inactivo');
+                }
+            });
+        });</script>
+}

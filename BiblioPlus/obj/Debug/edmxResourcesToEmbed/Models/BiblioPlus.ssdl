@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DB_BIBLIOTECAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AUTOR">
+    <Key>
+      <PropertyRef Name="IdAutor" />
+    </Key>
+    <Property Name="IdAutor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="FechaCreacion" Type="datetime" />
+  </EntityType>
+  <EntityType Name="CATEGORIA">
+    <Key>
+      <PropertyRef Name="IdCategoria" />
+    </Key>
+    <Property Name="IdCategoria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="FechaCreacion" Type="datetime" />
+  </EntityType>
+  <EntityType Name="EDITORIAL">
+    <Key>
+      <PropertyRef Name="IdEditorial" />
+    </Key>
+    <Property Name="IdEditorial" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="FechaCreacion" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ESTADO_PRESTAMO">
+    <Key>
+      <PropertyRef Name="IdEstadoPrestamo" />
+    </Key>
+    <Property Name="IdEstadoPrestamo" Type="int" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="FechaCreacion" Type="datetime" />
+  </EntityType>
+  <EntityType Name="LIBRO">
+    <Key>
+      <PropertyRef Name="IdLibro" />
+    </Key>
+    <Property Name="IdLibro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Titulo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Edicion" Type="varchar" MaxLength="50" />
+    <Property Name="AnioPublicacion" Type="int" />
+    <Property Name="IdCategoria" Type="int" />
+    <Property Name="IdEditorial" Type="int" />
+    <Property Name="IdAutor" Type="int" />
+    <Property Name="Estado" Type="varchar" MaxLength="20" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="StockActual" Type="int" />
+  </EntityType>
+  <EntityType Name="ORDEN_COMPRA">
+    <Key>
+      <PropertyRef Name="IdOrdenCompra" />
+    </Key>
+    <Property Name="IdOrdenCompra" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPersona" Type="int" Nullable="false" />
+    <Property Name="IdLibro" Type="int" Nullable="false" />
+    <Property Name="Cantidad" Type="int" Nullable="false" />
+    <Property Name="FechaCompra" Type="datetime" Nullable="false" />
+    <Property Name="Estado" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PENALIZACION">
+    <Key>
+      <PropertyRef Name="IdPenalizacion" />
+    </Key>
+    <Property Name="IdPenalizacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPrestamo" Type="int" />
+    <Property Name="Monto" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Motivo" Type="varchar" MaxLength="100" />
+    <Property Name="FechaRegistro" Type="datetime" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="Pagado" Type="bit" />
+  </EntityType>
+  <EntityType Name="Persona">
+    <Key>
+      <PropertyRef Name="IdPersona" />
+    </Key>
+    <Property Name="IdPersona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+    <Property Name="Apellido" Type="varchar" MaxLength="50" />
+    <Property Name="Correo" Type="varchar" MaxLength="100" />
+    <Property Name="Clave" Type="varchar" MaxLength="100" />
+    <Property Name="Estado" Type="int" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="IdTipoPersona" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PRESTAMO">
+    <Key>
+      <PropertyRef Name="IdPrestamo" />
+    </Key>
+    <Property Name="IdPrestamo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdEstadoPrestamo" Type="int" />
+    <Property Name="IdPersona" Type="int" />
+    <Property Name="IdLibro" Type="int" />
+    <Property Name="FechaDevolucion" Type="datetime" />
+    <Property Name="FechaConfirmacionDevolucion" Type="datetime" />
+    <Property Name="EstadoEntregado" Type="varchar" MaxLength="100" />
+    <Property Name="EstadoRecibido" Type="varchar" MaxLength="100" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="FechaEntregado" Type="datetime" />
+  </EntityType>
+  <EntityType Name="TIPO_PERSONA">
+    <Key>
+      <PropertyRef Name="IdTipoPersona" />
+    </Key>
+    <Property Name="IdTipoPersona" Type="int" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+    <Property Name="Estado" Type="bit" />
+    <Property Name="FechaCreacion" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_BIBLIOTECA.dbo.vw_PrestamosRecientes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_PrestamosRecientes">
+    <Key>
+      <PropertyRef Name="IdPrestamo" />
+      <PropertyRef Name="Titulo" />
+    </Key>
+    <Property Name="IdPrestamo" Type="int" Nullable="false" />
+    <Property Name="Titulo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Lector" Type="varchar" MaxLength="101" />
+    <Property Name="FechaEntregado" Type="datetime" />
+    <Property Name="FechaDevolucion" Type="datetime" />
+  </EntityType>
+  <Association Name="FK__LIBRO__IdAutor__5AEE82B9">
+    <End Role="AUTOR" Type="Self.AUTOR" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AUTOR">
+        <PropertyRef Name="IdAutor" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="IdAutor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LIBRO__IdCategor__5BE2A6F2">
+    <End Role="CATEGORIA" Type="Self.CATEGORIA" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CATEGORIA">
+        <PropertyRef Name="IdCategoria" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="IdCategoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__LIBRO__IdEditori__5CD6CB2B">
+    <End Role="EDITORIAL" Type="Self.EDITORIAL" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EDITORIAL">
+        <PropertyRef Name="IdEditorial" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="IdEditorial" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ORDEN_COM__IdLib__693CA210">
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+    <End Role="ORDEN_COMPRA" Type="Self.ORDEN_COMPRA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="IdLibro" />
+      </Principal>
+      <Dependent Role="ORDEN_COMPRA">
+        <PropertyRef Name="IdLibro" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ORDEN_COM__IdPer__68487DD7">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
+    <End Role="ORDEN_COMPRA" Type="Self.ORDEN_COMPRA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="IdPersona" />
+      </Principal>
+      <Dependent Role="ORDEN_COMPRA">
+        <PropertyRef Name="IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PENALIZAC__IdPre__5DCAEF64">
+    <End Role="PRESTAMO" Type="Self.PRESTAMO" Multiplicity="0..1" />
+    <End Role="PENALIZACION" Type="Self.PENALIZACION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRESTAMO">
+        <PropertyRef Name="IdPrestamo" />
+      </Principal>
+      <Dependent Role="PENALIZACION">
+        <PropertyRef Name="IdPrestamo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESTAMO__IdEsta__5FB337D6">
+    <End Role="ESTADO_PRESTAMO" Type="Self.ESTADO_PRESTAMO" Multiplicity="0..1" />
+    <End Role="PRESTAMO" Type="Self.PRESTAMO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTADO_PRESTAMO">
+        <PropertyRef Name="IdEstadoPrestamo" />
+      </Principal>
+      <Dependent Role="PRESTAMO">
+        <PropertyRef Name="IdEstadoPrestamo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESTAMO__IdLibr__60A75C0F">
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="0..1" />
+    <End Role="PRESTAMO" Type="Self.PRESTAMO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="IdLibro" />
+      </Principal>
+      <Dependent Role="PRESTAMO">
+        <PropertyRef Name="IdLibro" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESTAMO__IdPers__619B8048">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="PRESTAMO" Type="Self.PRESTAMO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="IdPersona" />
+      </Principal>
+      <Dependent Role="PRESTAMO">
+        <PropertyRef Name="IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Persona_TipoPersona">
+    <End Role="TIPO_PERSONA" Type="Self.TIPO_PERSONA" Multiplicity="1" />
+    <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TIPO_PERSONA">
+        <PropertyRef Name="IdTipoPersona" />
+      </Principal>
+      <Dependent Role="Persona">
+        <PropertyRef Name="IdTipoPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DB_BIBLIOTECAModelStoreContainer">
+    <EntitySet Name="AUTOR" EntityType="Self.AUTOR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ESTADO_PRESTAMO" EntityType="Self.ESTADO_PRESTAMO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LIBRO" EntityType="Self.LIBRO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ORDEN_COMPRA" EntityType="Self.ORDEN_COMPRA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PENALIZACION" EntityType="Self.PENALIZACION" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRESTAMO" EntityType="Self.PRESTAMO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TIPO_PERSONA" EntityType="Self.TIPO_PERSONA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vw_PrestamosRecientes" EntityType="Self.vw_PrestamosRecientes" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [vw_PrestamosRecientes].[IdPrestamo] AS [IdPrestamo], 
+    [vw_PrestamosRecientes].[Titulo] AS [Titulo], 
+    [vw_PrestamosRecientes].[Lector] AS [Lector], 
+    [vw_PrestamosRecientes].[FechaEntregado] AS [FechaEntregado], 
+    [vw_PrestamosRecientes].[FechaDevolucion] AS [FechaDevolucion]
+    FROM [dbo].[vw_PrestamosRecientes] AS [vw_PrestamosRecientes]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__LIBRO__IdAutor__5AEE82B9" Association="Self.FK__LIBRO__IdAutor__5AEE82B9">
+      <End Role="AUTOR" EntitySet="AUTOR" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LIBRO__IdCategor__5BE2A6F2" Association="Self.FK__LIBRO__IdCategor__5BE2A6F2">
+      <End Role="CATEGORIA" EntitySet="CATEGORIA" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__LIBRO__IdEditori__5CD6CB2B" Association="Self.FK__LIBRO__IdEditori__5CD6CB2B">
+      <End Role="EDITORIAL" EntitySet="EDITORIAL" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ORDEN_COM__IdLib__693CA210" Association="Self.FK__ORDEN_COM__IdLib__693CA210">
+      <End Role="LIBRO" EntitySet="LIBRO" />
+      <End Role="ORDEN_COMPRA" EntitySet="ORDEN_COMPRA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ORDEN_COM__IdPer__68487DD7" Association="Self.FK__ORDEN_COM__IdPer__68487DD7">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="ORDEN_COMPRA" EntitySet="ORDEN_COMPRA" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PENALIZAC__IdPre__5DCAEF64" Association="Self.FK__PENALIZAC__IdPre__5DCAEF64">
+      <End Role="PRESTAMO" EntitySet="PRESTAMO" />
+      <End Role="PENALIZACION" EntitySet="PENALIZACION" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESTAMO__IdEsta__5FB337D6" Association="Self.FK__PRESTAMO__IdEsta__5FB337D6">
+      <End Role="ESTADO_PRESTAMO" EntitySet="ESTADO_PRESTAMO" />
+      <End Role="PRESTAMO" EntitySet="PRESTAMO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESTAMO__IdLibr__60A75C0F" Association="Self.FK__PRESTAMO__IdLibr__60A75C0F">
+      <End Role="LIBRO" EntitySet="LIBRO" />
+      <End Role="PRESTAMO" EntitySet="PRESTAMO" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESTAMO__IdPers__619B8048" Association="Self.FK__PRESTAMO__IdPers__619B8048">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="PRESTAMO" EntitySet="PRESTAMO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Persona_TipoPersona" Association="Self.FK_Persona_TipoPersona">
+      <End Role="TIPO_PERSONA" EntitySet="TIPO_PERSONA" />
+      <End Role="Persona" EntitySet="Persona" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

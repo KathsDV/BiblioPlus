@@ -1,0 +1,118 @@
+﻿@model BiblioPlus.Models.DestacadosDelMesViewModel
+
+@{
+    ViewBag.Title = "Destacados del Mes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .destacados-container {
+        padding: 30px;
+        max-width: 1000px;
+        margin: 30px auto;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2.8rem;
+        color: #37474f; /* Gris azulado oscuro para el título de la sección */
+        margin-bottom: 40px;
+        font-weight: 700;
+    }
+
+    .destacados-grid {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+
+    .featured-card {
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 25px;
+        background-color: #e0f2f7; /* Fondo azul claro de las tarjetas */
+        flex: 1 1 calc(50% - 15px);
+        min-width: 300px;
+    }
+
+        .featured-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        }
+
+    .card-subtitle {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #1F4E70; /* Azul oscuro para los subtítulos (ej. "Lector del Mes") */
+    }
+
+    .card-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #223344; /* Azul muy oscuro para los títulos principales (nombre, libro) */
+        margin-bottom: 15px;
+    }
+
+    .card-info {
+        font-size: 1.1rem;
+        color: #4A657D; /* Gris azulado para la información general */
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .card-info strong {
+            font-weight: 600;
+            color: #3B546A; /* Azul oscuro más profundo para las etiquetas fuertes */
+        }
+
+    @@media (max-width: 768px) {
+        .destacados-grid {
+            flex-direction: column;
+        }
+
+        .featured-card {
+            flex-basis: 100%;
+        }
+    }
+</style>
+
+<div class="destacados-container">
+    <h2 class="section-title">Nuestros Destacados del Mes</h2>
+
+    <div class="destacados-grid">
+        <div class="featured-card lector-card">
+            <h3 class="card-subtitle"><i class="fas fa-user-graduate"></i> Lector del Mes</h3>
+            @if (Model.Persona != null)
+            {
+                <h4 class="card-title">@Model.Persona.Nombre @Model.Persona.Apellido</h4>
+                <p class="card-info"><i class="fas fa-book-reader"></i> <strong>Total de Préstamos:</strong> @Model.TotalPrestamosPersona</p>
+            }
+            else
+            {
+                <p class="card-info">No hay datos disponibles para el lector del mes.</p>
+            }
+        </div>
+
+        <div class="featured-card libro-card">
+            <h3 class="card-subtitle"><i class="fas fa-book-open"></i> Libro del Mes</h3>
+            @if (Model.Libro != null)
+            {
+                <h4 class="card-title">@Model.Libro.Titulo</h4>
+                <p class="card-info"><strong>Autor:</strong> @Model.Libro.AUTOR.Descripcion</p>
+                <p class="card-info"><strong>Categoría:</strong> @Model.Libro.CATEGORIA.Descripcion</p>
+                <p class="card-info"><strong>Editorial:</strong> @Model.Libro.EDITORIAL.Descripcion</p>
+                <p class="card-info"><i class="fas fa-sort-numeric-up"></i> <strong>Total de Préstamos:</strong> @Model.TotalPrestamosLibros</p>
+            }
+            else
+            {
+                <p class="card-info">No hay datos disponibles para el libro del mes.</p>
+            }
+        </div>
+    </div>
+</div>

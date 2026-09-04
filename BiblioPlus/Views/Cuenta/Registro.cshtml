@@ -1,0 +1,232 @@
+﻿@model BiblioPlus.Models.Persona
+
+@{
+    ViewBag.Title = "Registro de Usuario - Biblio Plus";
+}
+
+<style>
+    body, h1, h2, h3, h4, h5, h6, label, p, a {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+        padding: 20px;
+    }
+
+    .login-card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+        .login-card h2 {
+            color: #343a40;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+    .form-group-with-icon {
+        margin-bottom: 20px;
+        position: relative;
+        text-align: left;
+    }
+
+    .form-group-no-icon {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+
+        .form-group-with-icon label, .form-group-no-icon label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group-with-icon .form-control, .form-group-no-icon .form-control {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            height: auto;
+            font-size: 1.05rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+    .form-group-with-icon .form-control {
+        padding-left: 45px;
+    }
+
+
+        .form-group-with-icon .form-control:focus, .form-group-no-icon .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.2);
+        }
+
+    .form-group-with-icon .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 45px;
+        color: #6c757d;
+        font-size: 1.2rem;
+    }
+
+    .form-group-with-icon input:focus + .input-icon,
+    .form-group-with-icon .form-control:focus ~ .input-icon {
+        color: #007bff;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 45px;
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+
+        .toggle-password:hover {
+            color: #007bff;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 14px 30px;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        margin-top: 10px; /* <--- AJUSTE CLAVE AQUÍ: REDUCIDO A 10PX */
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        width: 100%;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+        }
+
+    .field-validation-error {
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+        text-align: left;
+    }
+
+    .login-link-text {
+        margin-top: 25px;
+        color: #6c757d;
+        font-size: 1rem;
+    }
+
+        .login-link-text a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+            .login-link-text a:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <h2>Registrarse</h2>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group-with-icon">
+                @Html.LabelFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", placeholder = "Ingresa tu nombre", required = "required" })
+                <i class="fas fa-user input-icon"></i>
+            </div>
+
+            <div class="form-group-with-icon">
+                @Html.LabelFor(model => model.Apellido)
+                @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control", placeholder = "Ingresa tu apellido", required = "required" })
+                <i class="fas fa-user input-icon"></i>
+            </div>
+
+            <div class="form-group-with-icon">
+                @Html.LabelFor(model => model.Correo)
+                @Html.TextBoxFor(model => model.Correo, new { @class = "form-control", type = "email", placeholder = "ejemplo@correo.com", required = "required" })
+                <i class="fas fa-envelope input-icon"></i>
+            </div>
+
+            <div class="form-group-with-icon">
+                @Html.LabelFor(model => model.Clave)
+                @Html.PasswordFor(model => model.Clave, new { @class = "form-control", placeholder = "Crea tu contraseña", required = "required" })
+                <i class="fas fa-lock input-icon"></i>
+                <i class="fas fa-eye toggle-password" id="togglePasswordRegistro"></i>
+            </div>
+
+            <div class="form-group-with-icon">
+                @Html.Label("ConfirmarClave", "Confirmar Contraseña")
+                @Html.Password("ConfirmarClave", null, new { @class = "form-control", placeholder = "Confirma tu contraseña", required = "required" })
+                <i class="fas fa-key input-icon"></i>
+                <i class="fas fa-eye toggle-password" id="toggleConfirmPasswordRegistro"></i>
+            </div>
+
+
+            <div class="form-group-no-icon">
+                @Html.LabelFor(model => model.IdTipoPersona, "Tipo de Usuario")
+                @Html.DropDownList("IdTipoPersona", null, "-- Selecciona --", new { @class = "form-control", required = "required" })
+            </div>
+
+            <div>
+                <input type="submit" value="Registrarse" class="btn btn-primary btn-block" />
+            </div>
+
+            <p class="login-link-text">¿Ya tienes cuenta? <a href="@Url.Action("Login", "Cuenta")">Inicia Sesión aquí</a></p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePassword = document.querySelector('#togglePasswordRegistro');
+            const passwordField = document.querySelector('#Clave');
+
+            if (togglePassword && passwordField) {
+                togglePassword.addEventListener('click', function (e) {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            const toggleConfirmPassword = document.querySelector('#toggleConfirmPasswordRegistro');
+            const confirmPasswordField = document.querySelector('#ConfirmarClave');
+
+            if (toggleConfirmPassword && confirmPasswordField) {
+                toggleConfirmPassword.addEventListener('click', function (e) {
+                    const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    confirmPasswordField.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+        });
+    </script>
+}

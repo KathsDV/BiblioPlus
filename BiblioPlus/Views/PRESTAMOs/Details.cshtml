@@ -1,0 +1,131 @@
+﻿@model BiblioPlus.Models.PRESTAMO
+
+@{
+    ViewBag.Title = "Detalles del Préstamo";
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-info-circle me-2"></i> Detalles del Préstamo
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i> Información Completa del Préstamo</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdPrestamo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdPrestamo)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.LIBRO.Titulo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.LIBRO.Titulo)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Persona.Nombre)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Persona.Nombre) @Html.DisplayFor(model => model.Persona.Apellido)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("dd/MM/yyyy hh:mm tt") : "N/A")
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaDevolucion)
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.FechaDevolucion.HasValue ? Model.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "N/A")
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaEntregado)
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.FechaEntregado.HasValue ? Model.FechaEntregado.Value.ToString("dd/MM/yyyy") : "N/A")
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaConfirmacionDevolucion)
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.FechaConfirmacionDevolucion.HasValue ? Model.FechaConfirmacionDevolucion.Value.ToString("dd/MM/yyyy") : "N/A")
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.ESTADO_PRESTAMO.Descripcion)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string badgeClass = "";
+                    switch (Model.ESTADO_PRESTAMO.Descripcion)
+                    {
+                        case "Pendiente":
+                            badgeClass = "bg-warning text-dark";
+                            break;
+                        case "Retirado":
+                            badgeClass = "bg-info";
+                            break;
+                        case "Devuelto":
+                            badgeClass = "bg-success";
+                            break;
+                        case "Vencido":
+                            badgeClass = "bg-danger";
+                            break;
+                        case "Cancelado":
+                            badgeClass = "bg-secondary";
+                            break;
+                        case "Pagado":
+                            badgeClass = "bg-primary";
+                            break;
+                        default:
+                            badgeClass = "bg-secondary";
+                            break;
+                    }
+                }
+                <span class="badge @badgeClass">@Html.DisplayFor(model => model.ESTADO_PRESTAMO.Descripcion)</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.EstadoEntregado)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EstadoEntregado)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.EstadoRecibido)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EstadoRecibido)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string estadoTexto = Model.Estado.HasValue ? (Model.Estado.Value ? "Activo" : "Inactivo") : "N/A";
+                    string badgeClassEstado = Model.Estado.HasValue ? (Model.Estado.Value ? "bg-success" : "bg-danger") : "bg-secondary";
+                }
+                <span class="badge @badgeClassEstado">@estadoTexto</span>
+            </dd>
+
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @Html.ActionLink("Volver a la Lista", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>

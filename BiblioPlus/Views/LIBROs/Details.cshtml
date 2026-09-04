@@ -1,0 +1,120 @@
+﻿@model BiblioPlus.Models.LIBRO
+
+@{
+    ViewBag.Title = "Detalles del Libro";
+    int tipoUsuario = Session["IdTipoPersona"] != null ? Convert.ToInt32(Session["IdTipoPersona"]) : 0;
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-info-circle me-2"></i> Detalles del Libro
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-book-open me-2"></i> Información Completa del Libro</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            @* Usamos dl (Description List) con clases de Bootstrap para un diseño de grid *@
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.IdLibro)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdLibro)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Titulo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Titulo)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Edicion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Edicion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.AnioPublicacion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AnioPublicacion)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-9">
+                @{
+                    string badgeClass = "";
+                    switch (Model.Estado)
+                    {
+                        case "Libre":
+                            badgeClass = "bg-success";
+                            break;
+                        case "Prestado":
+                            badgeClass = "bg-warning text-dark";
+                            break;
+                        case "En Reparacion":
+                            badgeClass = "bg-info text-dark";
+                            break;
+                        case "Extraviado":
+                            badgeClass = "bg-danger";
+                            break;
+                        default:
+                            badgeClass = "bg-secondary";
+                            break;
+                    }
+                }
+                <span class="badge @badgeClass">@Html.DisplayFor(model => model.Estado)</span>
+            </dd>
+
+            <dt class="col-sm-3">
+                Categoría
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.CATEGORIA.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                Editorial
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EDITORIAL.Descripcion)
+            </dd>
+
+            <dt class="col-sm-3">
+                Autor
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AUTOR.Descripcion)
+            </dd>
+
+            @* AGREGADO: Detalles para StockActual *@
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.StockActual)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.StockActual)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.FechaCreacion.HasValue ? Model.FechaCreacion.Value.ToString("MM/dd/yyyy hh:mm tt") : "N/A")
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        @if (tipoUsuario == 1)
+        {
+            @Html.ActionLink("Editar", "Edit", "LIBROs", new { id = Model.IdLibro }, new { @class = "btn btn-primary me-2" })
+        }
+            @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+</div>

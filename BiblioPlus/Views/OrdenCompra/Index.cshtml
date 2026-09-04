@@ -1,0 +1,138 @@
+﻿@model IEnumerable<BiblioPlus.Models.ORDEN_COMPRA>
+
+@{
+    ViewBag.Title = "Gestión de Órdenes de Compra";
+}
+
+<h2 class="text-primary mt-4 mb-4">
+    <i class="fas fa-file-invoice me-2"></i> Gestión de Órdenes de Compra
+</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-list-alt me-2"></i> Listado de Órdenes de Compra</h5>
+        <a href="@Url.Action("Create")" class="btn btn-light btn-sm" title="Crear Nueva Orden de Compra" aria-label="Crear Nueva Orden de Compra">
+            <i class="fas fa-plus-circle me-2 text-primary"></i> Crear Nueva Orden
+        </a>
+    </div>
+    <div class="card-body">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    <div class="mb-3">
+        @using (Html.BeginForm("Index", "OrdenCompra", FormMethod.Get, new { @class = "row g-3 align-items-center" }))
+        {
+            <div class="col-12 col-md-auto">
+                <label for="searchString" class="form-label">Buscar por nombre de Administrador:</label>
+            </div>
+            <div class="col-12 col-md-5 col-lg-4">
+                @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control", placeholder = "Ingrese nombre de la persona" })
+            </div>
+            <div class="col-12 col-md-auto d-flex flex-wrap justify-content-center justify-content-md-start">
+                <button type="submit" class="btn btn-info me-2"><i class="fas fa-search me-1"></i> Buscar</button>
+                @Html.ActionLink("Ver Todas", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().Persona.Nombre)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().LIBRO.Titulo)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().Cantidad)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().FechaCompra)
+                        </th>
+                        <th class="text-center align-middle">
+                            @Html.DisplayNameFor(model => model.First().Estado)
+                        </th>
+                        <th class="text-center align-middle">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Persona.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LIBRO.Titulo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cantidad)
+                            </td>
+                            <td>
+                                @(item.FechaCompra.ToString("dd/MM/yyyy hh:mm tt"))
+                            </td>
+                            <td>
+                                @{
+                                    string badgeClass = "";
+                                    switch (item.Estado)
+                                    {
+                                        case "Pendiente":
+                                            badgeClass = "bg-warning text-dark";
+                                            break;
+                                        case "Completada":
+                                            badgeClass = "bg-success";
+                                            break;
+                                        case "Cancelada":
+                                            badgeClass = "bg-danger";
+                                            break;
+                                        default:
+                                            badgeClass = "bg-secondary";
+                                            break;
+                                    }
+                                }
+                                <span class="badge @badgeClass">@Html.DisplayFor(modelItem => item.Estado)</span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Acciones de Orden de Compra">
+                                    <a href="@Url.Action("Edit", new { id = item.IdOrdenCompra })" class="btn btn-sm btn-warning" title="Editar Orden" aria-label="Editar Orden">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a href="@Url.Action("Details", new { id = item.IdOrdenCompra })" class="btn btn-sm btn-info ms-1" title="Ver Detalles" aria-label="Ver Detalles">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a href="@Url.Action("Delete", new { id = item.IdOrdenCompra })" class="btn btn-sm btn-danger ms-1" title="Eliminar Orden" aria-label="Eliminar Orden">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>$(document).ready(function () {
+            window.setTimeout(function () {
+                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                    $(this).remove();
+                });
+            }, 4000);
+        });</script>
+}
